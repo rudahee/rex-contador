@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REX PUTO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #494949 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            min-width: 350px;
+        }
+
+        .countdown-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .countdown-display {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .time-unit {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .time-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .target-date {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .expired {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+                min-width: 280px;
+            }
+            
+            .countdown-title {
+                font-size: 1.5rem;
+            }
+            
+            .time-number {
+                font-size: 2rem;
+            }
+            
+            .countdown-display {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="countdown-title">1 año de extensible en:</h2>
+        <div class="countdown-display" id="countdown1">
+            <div class="time-unit">
+                <span class="time-number" id="days1">00</span>
+                <span class="time-label">Días</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-number" id="hours1">00</span>
+                <span class="time-label">Horas</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-number" id="minutes1">00</span>
+                <span class="time-label">Minutos</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-number" id="seconds1">00</span>
+                <span class="time-label">Segundos</span>
+            </div>
+        </div>
+    </div>
+   
+    <p>Dejar de donar subs en: <span id="days2">00</span>:<span id="hours2">00</span>:<span id="minutes2">00</span>:<span id="seconds2">00</span></p>
+    <script>
+        // Fechas objetivo
+        const targetDate1 = new Date('2025-12-15T00:00:00').getTime();
+        const targetDate2 = new Date('2025-12-12T19:00:00').getTime();
+
+        function updateCountdown(targetDate, suffix) {
+            const now = new Date().getTime();
+            const timeLeft = targetDate - now;
+
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                document.getElementById('days' + suffix).textContent = String(days).padStart(2, '0');
+                document.getElementById('hours' + suffix).textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes' + suffix).textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds' + suffix).textContent = String(seconds).padStart(2, '0');
+            } else {
+                // Tiempo expirado
+                document.getElementById('days' + suffix).textContent = '00';
+                document.getElementById('hours' + suffix).textContent = '00';
+                document.getElementById('minutes' + suffix).textContent = '00';
+                document.getElementById('seconds' + suffix).textContent = '00';
+                
+                const countdownElement = document.getElementById('countdown' + suffix);
+                countdownElement.classList.add('expired');
+            }
+        }
+
+        // Actualizar contadores cada segundo
+        function updateCountdowns() {
+            updateCountdown(targetDate1, '1');
+            updateCountdown(targetDate2, '2');
+        }
+
+        // Ejecutar inmediatamente y luego cada segundo
+        updateCountdowns();
+        setInterval(updateCountdowns, 1000);
+    </script>
+</body>
+</html>
